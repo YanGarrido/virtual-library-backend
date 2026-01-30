@@ -1,4 +1,4 @@
-package com.yan.virtuallibrary.domain;
+package com.yan.virtuallibrary.Users.domain.enums;
 
 public enum ReadStatus {
 

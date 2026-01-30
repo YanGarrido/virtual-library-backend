@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Users.repository;
 
-import com.yan.virtuallibrary.Users.domain.UserEntity;
+import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Users.controller;
 
-import com.yan.virtuallibrary.Users.domain.UserEntity;
+import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

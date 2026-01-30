@@ -1,4 +1,4 @@
-package com.yan.virtuallibrary.Books;
+package com.yan.virtuallibrary.Books.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
