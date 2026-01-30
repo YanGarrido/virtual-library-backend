@@ -1,12 +1,11 @@
 package com.yan.virtuallibrary.Users.domain;
 
+import com.yan.virtuallibrary.Books.BooksEntity;
 import com.yan.virtuallibrary.domain.ReadFormat;
 import com.yan.virtuallibrary.domain.ReadStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.apache.catalina.User;
 
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,14 +20,11 @@ public class UserBookEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity user;
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
-
-    @Column(name = "rating", length = 5)
-    private Integer rating;
+    private BooksEntity book;
 
     private LocalDate startDate;
     private LocalDate endDate;
