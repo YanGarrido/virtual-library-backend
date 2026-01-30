@@ -1,6 +1,7 @@
 package com.yan.virtuallibrary.Users.domain;
 
 import com.yan.virtuallibrary.Books.BooksEntity;
+import com.yan.virtuallibrary.Books.ReviewEntity;
 import com.yan.virtuallibrary.domain.ReadFormat;
 import com.yan.virtuallibrary.domain.ReadStatus;
 import jakarta.persistence.*;
@@ -36,6 +37,9 @@ public class UserBookEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "read_format", nullable = false)
     private ReadFormat readFormat;
+
+    @OneToOne(mappedBy = "userBook", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ReviewEntity reviewEntity;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
