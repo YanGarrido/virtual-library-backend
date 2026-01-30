@@ -1,6 +1,6 @@
-package com.yan.virtuallibrary.Books;
+package com.yan.virtuallibrary.Books.domain.entities;
 
-import com.yan.virtuallibrary.Users.domain.UserBookEntity;
+import com.yan.virtuallibrary.Users.domain.entities.UserBookEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

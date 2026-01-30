@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Users.service;
 
-import com.yan.virtuallibrary.Users.domain.UserEntity;
+import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package com.yan.virtuallibrary.Users.domain;
+package com.yan.virtuallibrary.Users.domain.entities;
 
-import com.yan.virtuallibrary.Books.BooksEntity;
-import com.yan.virtuallibrary.Books.ReviewEntity;
-import com.yan.virtuallibrary.domain.ReadFormat;
-import com.yan.virtuallibrary.domain.ReadStatus;
+import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
+import com.yan.virtuallibrary.Books.domain.entities.ReviewEntity;
+import com.yan.virtuallibrary.Users.domain.enums.ReadFormat;
+import com.yan.virtuallibrary.Users.domain.enums.ReadStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

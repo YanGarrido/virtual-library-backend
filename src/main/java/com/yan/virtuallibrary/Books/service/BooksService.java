@@ -1,5 +1,7 @@
-package com.yan.virtuallibrary.Books;
+package com.yan.virtuallibrary.Books.service;
 
+import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
+import com.yan.virtuallibrary.Books.repository.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
