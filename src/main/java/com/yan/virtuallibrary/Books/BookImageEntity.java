@@ -29,4 +29,5 @@ public class BookImageEntity {
     @JoinColumn(name = "review_id", nullable = false)
     private ReviewEntity review;
 
+
 }

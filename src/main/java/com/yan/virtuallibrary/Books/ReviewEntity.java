@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,8 +30,11 @@ public class ReviewEntity {
     private String text;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userBook_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_book_id", referencedColumnName = "id")
     private UserBookEntity userBook;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BookImageEntity> images = new ArrayList<>();
 
     @Column(name = "createdAt", nullable = false, updatable = false)
     private LocalDateTime createdAt;
