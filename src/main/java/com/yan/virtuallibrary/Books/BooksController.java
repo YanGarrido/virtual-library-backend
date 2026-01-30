@@ -24,9 +24,12 @@ public class BooksController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<BooksEntity>> findAllBooks(){
+    public ResponseEntity<?> findAllBooks(){
         try {
-            var result = booksService.execute()
+            var result = booksService.findAllBooks();
+            return  ResponseEntity.ok().body(result);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
