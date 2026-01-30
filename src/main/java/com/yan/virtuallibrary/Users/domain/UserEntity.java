@@ -1,4 +1,4 @@
-package com.yan.virtuallibrary.domain;
+package com.yan.virtuallibrary.Users.domain;
 
 import jakarta.persistence.*;
 //import jakarta.validation.constraints.Email;
@@ -6,10 +6,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "users")
+@Table(name = "tb_users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,9 @@ public class UserEntity {
 
     @Column(name = "updatedAt", nullable = true)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserBookEntity> userBooks = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
