@@ -26,9 +26,6 @@ public class UserBookEntity {
     @JoinColumn(name = "book_id", nullable = false)
     private BooksEntity book;
 
-    @Column(name = "rating", length = 5)
-    private Integer rating;
-
     private LocalDate startDate;
     private LocalDate endDate;
 
