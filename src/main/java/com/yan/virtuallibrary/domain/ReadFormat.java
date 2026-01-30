@@ -4,5 +4,6 @@ public enum ReadFormat {
 
     KINDLE,
     PHYSIC,
-    PDF
+    PDF,
+    AUDIOBOOK
 }
