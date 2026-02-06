@@ -19,15 +19,7 @@ public class UserBookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserEntity user;
-
-    @ManyToOne(fetch =  FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
-    private BooksEntity book;
-
-    private LocalDate startDate;
+    @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
@@ -40,6 +32,14 @@ public class UserBookEntity {
 
     @OneToOne(mappedBy = "userBook", cascade = CascadeType.ALL, orphanRemoval = true)
     private ReviewEntity reviewEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
+
+    @ManyToOne(fetch =  FetchType.LAZY)
+    @JoinColumn(name = "book_id", nullable = false)
+    private BooksEntity book;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
