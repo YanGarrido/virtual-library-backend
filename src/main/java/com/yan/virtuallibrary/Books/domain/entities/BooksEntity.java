@@ -1,5 +1,6 @@
 package com.yan.virtuallibrary.Books.domain.entities;
 
+import com.yan.virtuallibrary.Books.domain.enums.BookSource;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +15,9 @@ public class BooksEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "external_id")
+    private String externalId;
+
     @Column(name = "title")
     private String title;
     @Column(name = "author")
@@ -22,26 +26,30 @@ public class BooksEntity {
     private String publisher;
     @Column(name = "isbn")
     private String isbn;
-    @Column(name = "synopsis")
+    @Column(name = "synopsis", columnDefinition = "TEXT")
     private String synopsis;
     @Column (name = "genre")
     private String genre;
     @Column(name = "cover_url")
     private String coverUrl;
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "source", nullable = false)
+    private BookSource source = BookSource.MANUAL;
 
-    @Column(name = "updatedAt", nullable = true)
-    private LocalDateTime updatedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime created_at;
+
+    @Column(name = "updated_at", nullable = true)
+    private LocalDateTime updated_at;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.created_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 }
