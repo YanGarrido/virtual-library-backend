@@ -3,6 +3,8 @@ package com.yan.virtuallibrary.Users.domain.entities;
 import jakarta.persistence.*;
 //import jakarta.validation.constraints.Email;
 //import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,19 +19,19 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@NotBlank(message = "Nome é obrigatório")
+    @NotBlank(message = "Nome é obrigatório")
     @Column(name = "name", nullable = false)
     private String name;
 
-    //@NotBlank(message = "Username é obrigatório")
+    @NotBlank(message = "Username é obrigatório")
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    //@Email
+    @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    //@NotBlank
+    @NotBlank
     @Column(name = "password", nullable = false)
     private String password;
 
