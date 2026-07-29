@@ -1,5 +1,6 @@
 package com.yan.virtuallibrary.Users.domain.entities;
 
+import com.yan.virtuallibrary.Users.domain.enums.Role;
 import jakarta.persistence.*;
 //import jakarta.validation.constraints.Email;
 //import jakarta.validation.constraints.NotBlank;
@@ -35,22 +36,26 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role = Role.USER;
 
-    @Column(name = "updatedAt", nullable = true)
-    private LocalDateTime updatedAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime created_at;
+
+    @Column(name = "updated_at", nullable = true)
+    private LocalDateTime updated_at;
 
     @OneToMany(mappedBy = "user")
     private List<UserBookEntity> userBooks = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.created_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 }

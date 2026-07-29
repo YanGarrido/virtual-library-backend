@@ -30,26 +30,26 @@ public class ReviewEntity {
     private String text;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_book_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_book_id", referencedColumnName = "id",nullable = false, unique = true)
     private UserBookEntity userBook;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookImageEntity> images = new ArrayList<>();
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime created_at;
 
-    @Column(name = "updatedAt", nullable = true)
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_at", nullable = true)
+    private LocalDateTime updated_at;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.created_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 
 }

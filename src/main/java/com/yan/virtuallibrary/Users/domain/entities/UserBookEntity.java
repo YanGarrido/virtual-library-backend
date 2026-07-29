@@ -13,14 +13,18 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "tb_user_books")
+@Table(name = "tb_user_books",
+        uniqueConstraints = {@UniqueConstraint(name = "uk_user_book", columnNames = {"user_id", "book_id"})}
+)
 public class UserBookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "started_at")
+    private LocalDate startedAt;
 
-    @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    @Column(name = "finished_at", nullable = false)
+    private LocalDate finishedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "read_status", nullable = false)
@@ -42,19 +46,19 @@ public class UserBookEntity {
     private BooksEntity book;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime created_at;
 
     @Column(name = "updated_at", nullable = true)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated_at;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.created_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 
 }
