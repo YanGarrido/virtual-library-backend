@@ -35,22 +35,22 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "createdAt", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime created_at;
 
-    @Column(name = "updatedAt", nullable = true)
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_at", nullable = true)
+    private LocalDateTime updated_at;
 
     @OneToMany(mappedBy = "user")
     private List<UserBookEntity> userBooks = new ArrayList<>();
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        this.created_at = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.updated_at = LocalDateTime.now();
     }
 }
