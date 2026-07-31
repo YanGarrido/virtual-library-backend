@@ -23,7 +23,7 @@ public class UserBookEntity {
     @Column(name = "started_at")
     private LocalDate startedAt;
 
-    @Column(name = "finished_at", nullable = false)
+    @Column(name = "finished_at")
     private LocalDate finishedAt;
 
     @Enumerated(EnumType.STRING)
