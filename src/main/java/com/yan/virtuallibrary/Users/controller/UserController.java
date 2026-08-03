@@ -1,7 +1,10 @@
 package com.yan.virtuallibrary.Users.controller;
 
+import com.yan.virtuallibrary.Users.dto.UserBookRequestDTO;
+import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
+import com.yan.virtuallibrary.Users.service.UserBookService;
 import com.yan.virtuallibrary.Users.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserBookService userBookService;
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         try{
-            UserResponseDTO response = this.userService.execute(userRequestDTO);
+            UserResponseDTO response = this.userService.createUser(userRequestDTO);
             return ResponseEntity.status(201).body(response);
         } catch(Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -44,6 +49,16 @@ public class UserController {
 
         } catch (Exception e){
             return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/books")
+    public ResponseEntity<?> addNewBookToUser(@Valid @PathVariable Long id, @RequestBody UserBookRequestDTO userBookRequestDTO){
+        try{
+            UserBookResponseDTO response = this.userBookService.addNewBookToUser(id,userBookRequestDTO);
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

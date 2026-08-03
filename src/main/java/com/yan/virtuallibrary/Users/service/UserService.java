@@ -13,11 +13,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
-    public UserResponseDTO execute(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         UserEntity user = new UserEntity();
         user.setName(userRequestDTO.name());
         user.setUsername(userRequestDTO.username());
@@ -30,44 +32,43 @@ public class UserService {
                 savedUser.getId(),
                 savedUser.getName(),
                 savedUser.getUsername(),
-                savedUser.getEmail());
+                savedUser.getEmail(),
+                savedUser.getRole().name());
     }
 
-    public UserResponseDTO getUserById(Long id){
-        Optional<UserEntity> user = userRepository.findById(id);
-        if(user.isPresent()){
-            return new UserResponseDTO(
-                    user.get().getId(),
-                    user.get().getName(),
-                    user.get().getUsername(),
-                    user.get().getEmail());
+    public UserResponseDTO getUserById(Long id) {
+       UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
-        } else{
-            throw new RuntimeException("User not found");
-        }
+        return new UserResponseDTO(
+                user.getId(),
+                user.getName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().name());
 
 
     }
 
-    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO){
-        Optional<UserEntity> user = userRepository.findById(id);
-        if(user.isPresent()){
-            UserEntity userExisting = user.get();
-            userExisting.setName(userRequestDTO.name());
-            userExisting.setUsername(userRequestDTO.username());
-            userExisting.setEmail(userRequestDTO.email());
-            userExisting.setPassword(userRequestDTO.password());
+    public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user != null) {
+            user.setName(userRequestDTO.name());
+            user.setUsername(userRequestDTO.username());
+            user.setEmail(userRequestDTO.email());
+            user.setPassword(userRequestDTO.password());
 
-            UserEntity updatedUser = userRepository.save(userExisting);
+            UserEntity updatedUser = userRepository.save(user);
 
             return new UserResponseDTO(
                     updatedUser.getId(),
                     updatedUser.getName(),
                     updatedUser.getUsername(),
-                    updatedUser.getEmail());
+                    updatedUser.getEmail(),
+                    updatedUser.getRole().name());
         } else {
             throw new RuntimeException("User not found");
         }
     }
-
 }
+
+
