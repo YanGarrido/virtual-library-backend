@@ -20,11 +20,14 @@ public class UserService {
     }
 
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        UserEntity user = new UserEntity();
-        user.setName(userRequestDTO.name());
-        user.setUsername(userRequestDTO.username());
-        user.setEmail(userRequestDTO.email());
-        user.setPassword(userRequestDTO.password());
+        UserEntity user = new UserEntity(
+                userRequestDTO.name(),
+                userRequestDTO.username(),
+                userRequestDTO.email(),
+                userRequestDTO.password(),
+                userRequestDTO.role()
+        );
+
 
         UserEntity savedUser = userRepository.save(user);
 
