@@ -1,11 +1,13 @@
 package com.yan.virtuallibrary.Users.service;
 
+import com.yan.virtuallibrary.Users.domain.entities.UserBookEntity;
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,6 +79,8 @@ public class UserService {
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
     }
+
+
 }
 
 
