@@ -72,6 +72,11 @@ public class UserService {
             throw new RuntimeException("User not found");
         }
     }
+
+    public void deleteUser(Long id) {
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
+    }
 }
 
 

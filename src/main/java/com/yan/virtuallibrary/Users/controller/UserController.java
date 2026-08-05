@@ -20,17 +20,6 @@ public class UserController {
     @Autowired
     private UserBookService userBookService;
 
-    @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        try{
-            UserResponseDTO response = this.userService.createUser(userRequestDTO);
-            return ResponseEntity.status(201).body(response);
-        } catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id){
         try{
@@ -52,11 +41,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{id}/books")
-    public ResponseEntity<?> addNewBookToUser(@Valid @PathVariable Long id, @RequestBody UserBookRequestDTO userBookRequestDTO){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
         try{
-            UserBookResponseDTO response = this.userBookService.addNewBookToUser(id,userBookRequestDTO);
-            return ResponseEntity.ok().body(response);
+            this.userService.deleteUser(id);
+            return ResponseEntity.ok().body("User deleted successfully");
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
