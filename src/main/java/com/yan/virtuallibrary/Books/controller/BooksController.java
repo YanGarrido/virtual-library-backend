@@ -1,5 +1,6 @@
 package com.yan.virtuallibrary.Books.controller;
 
+import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.service.BooksService;
 import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,4 +34,24 @@ public class BooksController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateBooks(@PathVariable Long id, @RequestBody BookRequestDTO bookRequestDTO){
+        this.booksService.updateBooks(id, bookRequestDTO);
+        return ResponseEntity.ok().body("Book updated successfully");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBooks(@PathVariable Long id){
+        this.booksService.deleteBook(id);
+        return ResponseEntity.ok().body("Book deleted successfully");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> findBooks(@RequestParam(required = false) String title,
+                                       @RequestParam(required = false) String author,
+                                       @RequestParam(required = false) String genre,
+                                       @RequestParam(required = false) String isbn){
+    var result = this.booksService.findBooks(title, author, genre, isbn);
+    return ResponseEntity.ok().body(result);
+    }
 }

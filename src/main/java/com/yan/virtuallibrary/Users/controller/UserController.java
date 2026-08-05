@@ -1,7 +1,10 @@
 package com.yan.virtuallibrary.Users.controller;
 
+import com.yan.virtuallibrary.Users.dto.UserBookRequestDTO;
+import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
+import com.yan.virtuallibrary.Users.service.UserBookService;
 import com.yan.virtuallibrary.Users.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +17,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        try{
-            UserResponseDTO response = this.userService.execute(userRequestDTO);
-            return ResponseEntity.status(201).body(response);
-        } catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
+    @Autowired
+    private UserBookService userBookService;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id){
@@ -44,6 +38,16 @@ public class UserController {
 
         } catch (Exception e){
             return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+        try{
+            this.userService.deleteUser(id);
+            return ResponseEntity.ok().body("User deleted successfully");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

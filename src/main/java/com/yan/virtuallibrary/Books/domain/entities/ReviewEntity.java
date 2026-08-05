@@ -23,8 +23,8 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "rating", length = 5)
-    private int rating;
+    @Column(name = "rating", nullable = false)
+    private Integer rating;
 
     @Column(name = "text", columnDefinition = "TEXT")
     private String text;

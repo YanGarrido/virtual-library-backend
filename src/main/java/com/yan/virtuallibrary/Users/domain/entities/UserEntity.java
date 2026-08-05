@@ -7,15 +7,21 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "tb_users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,6 +55,14 @@ public class UserEntity {
     @OneToMany(mappedBy = "user")
     private List<UserBookEntity> userBooks = new ArrayList<>();
 
+    public UserEntity(@NotBlank() String name, @NotBlank() String username, @Email() String email, String encryptedPassword, @NotBlank Role role) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = encryptedPassword;
+        this.role = role;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.created_at = LocalDateTime.now();
@@ -57,5 +71,34 @@ public class UserEntity {
     @PreUpdate
     protected void onUpdate() {
         this.updated_at = LocalDateTime.now();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == Role.ADMIN) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+
+        }
+        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
