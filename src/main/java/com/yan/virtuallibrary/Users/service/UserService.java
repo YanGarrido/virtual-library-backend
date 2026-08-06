@@ -6,8 +6,6 @@ import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserService {
 
@@ -39,17 +37,13 @@ public class UserService {
                 savedUser.getRole().name());
     }
 
-    public UserResponseDTO getUserById(Long id) {
-       UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-
-        return new UserResponseDTO(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().name());
-
-
+    public UserResponseDTO getMe(UserEntity user) {
+      return new UserResponseDTO(
+              user.getId(),
+              user.getName(),
+              user.getUsername(),
+              user.getEmail(),
+              user.getRole().name());
     }
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO userRequestDTO) {
@@ -77,6 +71,8 @@ public class UserService {
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
     }
+
+
 }
 
 
