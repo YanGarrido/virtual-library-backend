@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
+
     private UserService userService;
-    @Autowired
     private UserBookService userBookService;
+
+    public UserController(UserService userService, UserBookService userBookService){
+        this.userService = userService;
+        this.userBookService = userBookService;
+    }
 
     @GetMapping("/me")
     public ResponseEntity<?> getMe(

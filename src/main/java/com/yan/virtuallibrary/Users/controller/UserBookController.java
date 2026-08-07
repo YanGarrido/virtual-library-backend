@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserBookController {
-    @Autowired
+
+
     UserBookService userBookService;
+
+    public UserBookController(UserBookService userBookService){
+        this.userBookService = userBookService;
+    }
 
     @PostMapping("/me/books")
     public ResponseEntity<?> addNewBookToUser(

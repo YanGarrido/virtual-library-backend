@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Users.service;
 
-import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
+import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
 import com.yan.virtuallibrary.Books.dto.BookResponseDTO;
 import com.yan.virtuallibrary.Books.repository.BooksRepository;
 import com.yan.virtuallibrary.Users.domain.entities.UserBookEntity;
@@ -27,11 +27,16 @@ public class UserBookService {
     }
 
     public UserBookResponseDTO addNewBookToUser(Long id, UserBookRequestDTO userBookRequestDTO){
+
         UserEntity user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        BooksEntity book = booksRepository.findById(userBookRequestDTO.bookId())
+
+        BookEntity book = booksRepository.findById(userBookRequestDTO.bookId())
                 .orElseThrow(() -> new RuntimeException("Book not found"));
 
+        if(userBookRepository.existsByUser_IdAndBook_Id(id, userBookRequestDTO.bookId())){
+            throw new RuntimeException("This book is already in your library");
+        }
 
         UserBookEntity userBookEntity = new UserBookEntity();
         userBookEntity.setReadStatus(userBookRequestDTO.readStatus());

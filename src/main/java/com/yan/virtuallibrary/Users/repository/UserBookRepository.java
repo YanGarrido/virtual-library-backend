@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserBookRepository extends JpaRepository<UserBookEntity, Long> {
     List<UserBookEntity> findAllByUser_Id(Long id);
     Optional<UserBookEntity> findByUser_IdAndBook_Id(Long userId, Long bookId);
+    boolean existsByUser_IdAndBook_Id(Long userId, Long bookId);
 }

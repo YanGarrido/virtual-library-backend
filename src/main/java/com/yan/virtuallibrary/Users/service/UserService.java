@@ -18,25 +18,6 @@ public class UserService {
 
     }
 
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        UserEntity user = new UserEntity(
-                userRequestDTO.name(),
-                userRequestDTO.username(),
-                userRequestDTO.email(),
-                userRequestDTO.password(),
-                userRequestDTO.role()
-        );
-
-
-        UserEntity savedUser = userRepository.save(user);
-
-        return new UserResponseDTO(
-                savedUser.getName(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getRole().name());
-    }
-
     public UserResponseDTO getMe(UserEntity user) {
       return new UserResponseDTO(
               user.getName(),
