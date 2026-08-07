@@ -67,7 +67,7 @@ public class UserBookService {
 
     }
     
-    public List<UserBookResponseDTO> findAllBooks(Long id){
+    public List<UserBookResponseDTO> findMyBooks(Long id){
         return userBookRepository.findAllByUser_Id(id).stream()
                 .map(userBookEntity -> new UserBookResponseDTO(
                         userBookEntity.getId(),

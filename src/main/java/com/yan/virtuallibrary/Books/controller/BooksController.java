@@ -34,15 +34,15 @@ public class BooksController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateBooks(@PathVariable Long id, @RequestBody BookRequestDTO bookRequestDTO){
-        this.booksService.updateBooks(id, bookRequestDTO);
+    @PutMapping("/{bookId}")
+    public ResponseEntity<?> updateBooks(@PathVariable Long bookId, @RequestBody BookRequestDTO bookRequestDTO){
+        this.booksService.updateBooks(bookId, bookRequestDTO);
         return ResponseEntity.ok().body("Book updated successfully");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBooks(@PathVariable Long id){
-        this.booksService.deleteBook(id);
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity<?> deleteBooks(@PathVariable Long bookId){
+        this.booksService.deleteBook(bookId);
         return ResponseEntity.ok().body("Book deleted successfully");
     }
 
