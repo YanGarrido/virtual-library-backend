@@ -5,6 +5,8 @@ import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserUpdateDTO;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
+import com.yan.virtuallibrary.common.exception.UserNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +21,9 @@ public class UserService {
     }
 
     public UserResponseDTO getMe(UserEntity user) {
+        if(user == null){
+            throw new UserNotFoundException();
+        }
       return new UserResponseDTO(
               user.getName(),
               user.getUsername(),
@@ -27,7 +32,7 @@ public class UserService {
     }
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         if(userUpdateDTO.name() != null) {
             user.setName(userUpdateDTO.name());
         }
@@ -38,7 +43,8 @@ public class UserService {
             user.setEmail(userUpdateDTO.email());
         }
         if(userUpdateDTO.password() != null) {
-            user.setPassword(userUpdateDTO.password());
+            String encryptedPassword = new BCryptPasswordEncoder().encode(userUpdateDTO.password());
+            user.setPassword(encryptedPassword);
         }
         UserEntity updatedUser = userRepository.save(user);
         return new UserResponseDTO(
@@ -49,7 +55,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         userRepository.delete(user);
     }
 

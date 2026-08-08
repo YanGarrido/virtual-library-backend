@@ -26,23 +26,17 @@ public class UserBookController {
             @AuthenticationPrincipal UserEntity user,
             @RequestBody UserBookRequestDTO userBookRequestDTO){
 
-        try{
             UserBookResponseDTO response = this.userBookService.addNewBookToUser(user.getId(),userBookRequestDTO);
             return ResponseEntity.ok().body(response);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
     }
     @GetMapping("/me/books")
     public ResponseEntity<?> findMyBooks(
             @AuthenticationPrincipal UserEntity user){
 
-        try {
             var result = this.userBookService.findMyBooks(user.getId());
             return  ResponseEntity.ok().body(result);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+
     }
     @PatchMapping("/me/books/{bookId}")
     public ResponseEntity<?> updateBookStatus(

@@ -5,6 +5,7 @@ import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.auth.dto.AuthenticationDTO;
 import com.yan.virtuallibrary.auth.dto.LoginResponseDTO;
 import com.yan.virtuallibrary.auth.dto.RegisterDTO;
+import com.yan.virtuallibrary.common.exception.BadRequestException;
 import com.yan.virtuallibrary.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO){
         if(this.userRepository.findByUsername(registerDTO.username()) != null){
-            return ResponseEntity.badRequest().body("Username already exists");
+            throw new BadRequestException("Username already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
         UserEntity user = new UserEntity(

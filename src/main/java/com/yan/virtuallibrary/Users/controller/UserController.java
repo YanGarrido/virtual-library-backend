@@ -46,13 +46,8 @@ public class UserController {
     public ResponseEntity<?> deleteUser(
             @PathVariable Long id){
 
-        try{
             this.userService.deleteUser(id);
             return ResponseEntity.ok().body("User deleted successfully");
-
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 }

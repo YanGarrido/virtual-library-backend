@@ -10,6 +10,9 @@ import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookUpdateDTO;
 import com.yan.virtuallibrary.Users.repository.UserBookRepository;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
+import com.yan.virtuallibrary.common.exception.BookAlreadyInLibraryException;
+import com.yan.virtuallibrary.common.exception.BookNotFoundException;
+import com.yan.virtuallibrary.common.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,13 +32,13 @@ public class UserBookService {
     public UserBookResponseDTO addNewBookToUser(Long id, UserBookRequestDTO userBookRequestDTO){
 
         UserEntity user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(UserNotFoundException::new);
 
         BookEntity book = booksRepository.findById(userBookRequestDTO.bookId())
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found!"));
 
         if(userBookRepository.existsByUser_IdAndBook_Id(id, userBookRequestDTO.bookId())){
-            throw new RuntimeException("This book is already in your library");
+            throw new BookAlreadyInLibraryException();
         }
 
         UserBookEntity userBookEntity = new UserBookEntity();
@@ -73,6 +76,9 @@ public class UserBookService {
     }
     
     public List<UserBookResponseDTO> findMyBooks(Long id){
+        if(id == null){
+            throw new BookNotFoundException("Book not found!");
+        }
         return userBookRepository.findAllByUser_Id(id).stream()
                 .map(userBookEntity -> new UserBookResponseDTO(
                         userBookEntity.getId(),
@@ -99,7 +105,9 @@ public class UserBookService {
     }
 
     public UserBookResponseDTO updateBookStatus(Long userId, Long bookId, UserBookUpdateDTO userBookUpdateDTO){
-        UserBookEntity userBook = userBookRepository.findByUser_IdAndBook_Id(userId, bookId).orElseThrow(() -> new RuntimeException("UserBook not found"));
+        UserBookEntity userBook = userBookRepository.findByUser_IdAndBook_Id(userId, bookId)
+                .orElseThrow(() -> new BookNotFoundException("You don't have this book on your library!"));
+
         if(userBookUpdateDTO.readStatus() != null){ userBook.setReadStatus(userBookUpdateDTO.readStatus());}
         if(userBookUpdateDTO.readFormat() != null){ userBook.setReadFormat(userBookUpdateDTO.readFormat());}
         if(userBookUpdateDTO.startedAt() != null){ userBook.setStartedAt(userBookUpdateDTO.startedAt());}

@@ -3,7 +3,6 @@ package com.yan.virtuallibrary.Books.controller;
 import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.service.BookService;
 import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,22 +18,14 @@ public class BooksController {
 
     @PostMapping()
     public ResponseEntity<Object> createBook(@RequestBody BookEntity bookEntity){
-        try{
-            var result = bookService.execute(bookEntity);
+            var result = bookService.createBook(bookEntity);
             return ResponseEntity.ok().body(result);
-        } catch(Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
     @GetMapping()
     public ResponseEntity<?> findAllBooks(){
-        try {
             var result = bookService.findAllBooks();
             return  ResponseEntity.ok().body(result);
-        } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
     @GetMapping("/{bookId}")
     public ResponseEntity<?> findBook(@PathVariable Long bookId){

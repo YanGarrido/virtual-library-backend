@@ -5,7 +5,7 @@ import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.dto.BookResponseDTO;
 import com.yan.virtuallibrary.Books.dto.BookSearchResponseDTO;
 import com.yan.virtuallibrary.Books.repository.BooksRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yan.virtuallibrary.common.exception.BookNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class BookService {
         this.booksRepository = booksRepository;
     }
 
-    public BookEntity execute(BookEntity bookEntity){
+    public BookEntity createBook(BookEntity bookEntity){
         return booksRepository.save(bookEntity);
     }
 
@@ -28,7 +28,7 @@ public class BookService {
     }
 
     public BookResponseDTO findBook(Long bookId){
-        BookEntity book = booksRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookEntity book = booksRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book not found!"));
         return new BookResponseDTO(
                 book.getId(),
                 book.getExternalId(),
@@ -44,7 +44,7 @@ public class BookService {
     }
 
     public BookResponseDTO updateBooks(Long id, BookRequestDTO bookRequestDTO) {
-        BookEntity bookEntity = booksRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookEntity bookEntity = booksRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found"));
         if(bookEntity != null){
             bookEntity.setAuthor(bookRequestDTO.author());
             bookEntity.setTitle(bookRequestDTO.title());
@@ -74,7 +74,7 @@ public class BookService {
 
     }
     public void deleteBook(Long id) {
-        BookEntity bookEntity = booksRepository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        BookEntity bookEntity = booksRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found"));
         booksRepository.delete(bookEntity);
     }
 
