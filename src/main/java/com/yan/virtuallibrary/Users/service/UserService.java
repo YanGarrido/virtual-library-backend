@@ -19,16 +19,19 @@ public class UserService {
         this.userRepository = userRepository;
 
     }
+    private UserResponseDTO convertUserEntityforUserResponse(UserEntity user){
+        return new UserResponseDTO(
+                user.getName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().name());
+    }
 
     public UserResponseDTO getMe(UserEntity user) {
         if(user == null){
             throw new UserNotFoundException();
         }
-      return new UserResponseDTO(
-              user.getName(),
-              user.getUsername(),
-              user.getEmail(),
-              user.getRole().name());
+      return convertUserEntityforUserResponse(user);
     }
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO) {
@@ -47,11 +50,7 @@ public class UserService {
             user.setPassword(encryptedPassword);
         }
         UserEntity updatedUser = userRepository.save(user);
-        return new UserResponseDTO(
-                updatedUser.getName(),
-                updatedUser.getUsername(),
-                updatedUser.getEmail(),
-                updatedUser.getRole().name());
+        return convertUserEntityforUserResponse(updatedUser);
     }
 
     public void deleteUser(Long id) {

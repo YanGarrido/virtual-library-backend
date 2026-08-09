@@ -29,6 +29,30 @@ public class UserBookService {
         this.userBookRepository = userBookRepository;
     }
 
+    private UserBookResponseDTO convertUserBookEntityforUserBookResponse(UserBookEntity userBookEntity){
+        return new UserBookResponseDTO(
+                userBookEntity.getId(),
+                new BookResponseDTO(
+                        userBookEntity.getBook().getId(),
+                        userBookEntity.getBook().getExternalId(),
+                        userBookEntity.getBook().getTitle(),
+                        userBookEntity.getBook().getAuthor(),
+                        userBookEntity.getBook().getPublisher(),
+                        userBookEntity.getBook().getIsbn(),
+                        userBookEntity.getBook().getSynopsis(),
+                        userBookEntity.getBook().getGenre(),
+                        userBookEntity.getBook().getCoverUrl(),
+                        userBookEntity.getBook().getSource().name()
+                ),
+                userBookEntity.getReadStatus(),
+                userBookEntity.getReadFormat(),
+                userBookEntity.getStartedAt(),
+                userBookEntity.getFinishedAt(),
+                userBookEntity.getCreated_at(),
+                userBookEntity.getUpdated_at()
+        );
+    }
+
     public UserBookResponseDTO addNewBookToUser(Long id, UserBookRequestDTO userBookRequestDTO){
 
         UserEntity user = userRepository.findById(id)
@@ -51,27 +75,7 @@ public class UserBookService {
 
         UserBookEntity savedUserBook = userBookRepository.save(userBookEntity);
 
-        return new UserBookResponseDTO(
-                savedUserBook.getId(),
-                new BookResponseDTO(
-                        savedUserBook.getBook().getId(),
-                        savedUserBook.getBook().getExternalId(),
-                        savedUserBook.getBook().getTitle(),
-                        savedUserBook.getBook().getAuthor(),
-                        savedUserBook.getBook().getPublisher(),
-                        savedUserBook.getBook().getIsbn(),
-                        savedUserBook.getBook().getSynopsis(),
-                        savedUserBook.getBook().getGenre(),
-                        savedUserBook.getBook().getCoverUrl(),
-                        savedUserBook.getBook().getSource().name()
-                ),
-                savedUserBook.getReadStatus(),
-                savedUserBook.getReadFormat(),
-                savedUserBook.getStartedAt(),
-                savedUserBook.getFinishedAt(),
-                savedUserBook.getCreated_at(),
-                savedUserBook.getUpdated_at()
-        );
+        return convertUserBookEntityforUserBookResponse(savedUserBook);
 
     }
     
@@ -80,27 +84,7 @@ public class UserBookService {
             throw new BookNotFoundException("Book not found!");
         }
         return userBookRepository.findAllByUser_Id(id).stream()
-                .map(userBookEntity -> new UserBookResponseDTO(
-                        userBookEntity.getId(),
-                        new BookResponseDTO(
-                                userBookEntity.getBook().getId(),
-                                userBookEntity.getBook().getExternalId(),
-                                userBookEntity.getBook().getTitle(),
-                                userBookEntity.getBook().getAuthor(),
-                                userBookEntity.getBook().getPublisher(),
-                                userBookEntity.getBook().getIsbn(),
-                                userBookEntity.getBook().getSynopsis(),
-                                userBookEntity.getBook().getGenre(),
-                                userBookEntity.getBook().getCoverUrl(),
-                                userBookEntity.getBook().getSource().name()
-                        ),
-                        userBookEntity.getReadStatus(),
-                        userBookEntity.getReadFormat(),
-                        userBookEntity.getStartedAt(),
-                        userBookEntity.getFinishedAt(),
-                        userBookEntity.getCreated_at(),
-                        userBookEntity.getUpdated_at()
-                ))
+                .map(this::convertUserBookEntityforUserBookResponse)
                 .toList();
     }
 
@@ -115,27 +99,13 @@ public class UserBookService {
 
         UserBookEntity updatedUserBook = userBookRepository.save(userBook);
 
-        return new UserBookResponseDTO(
-                updatedUserBook.getId(),
-                new BookResponseDTO(
-                        updatedUserBook.getBook().getId(),
-                        updatedUserBook.getBook().getExternalId(),
-                        updatedUserBook.getBook().getTitle(),
-                        updatedUserBook.getBook().getAuthor(),
-                        updatedUserBook.getBook().getPublisher(),
-                        updatedUserBook.getBook().getIsbn(),
-                        updatedUserBook.getBook().getSynopsis(),
-                        updatedUserBook.getBook().getGenre(),
-                        updatedUserBook.getBook().getCoverUrl(),
-                        updatedUserBook.getBook().getSource().name()
-                ),
-                updatedUserBook.getReadStatus(),
-                updatedUserBook.getReadFormat(),
-                updatedUserBook.getStartedAt(),
-                updatedUserBook.getFinishedAt(),
-                updatedUserBook.getCreated_at(),
-                updatedUserBook.getUpdated_at()
-        );
+        return convertUserBookEntityforUserBookResponse(updatedUserBook);
+    }
+
+    public void deleteBook(Long userId, Long bookId){
+        UserBookEntity userBook = userBookRepository.findByUser_IdAndBook_Id(userId,bookId)
+                .orElseThrow(() -> new BookNotFoundException("You don't have this book on your library!"));
+        userBookRepository.delete(userBook);
     }
 
 }
