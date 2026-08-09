@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Users.domain.entities;
 
-import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
+import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
 import com.yan.virtuallibrary.Books.domain.entities.ReviewEntity;
 import com.yan.virtuallibrary.Users.domain.enums.ReadFormat;
 import com.yan.virtuallibrary.Users.domain.enums.ReadStatus;
@@ -43,7 +43,7 @@ public class UserBookEntity {
 
     @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "book_id", nullable = false)
-    private BooksEntity book;
+    private BookEntity book;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime created_at;

@@ -1,6 +1,6 @@
 package com.yan.virtuallibrary.Wishlist.domain.entities;
 
-import com.yan.virtuallibrary.Books.domain.entities.BooksEntity;
+import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class WishlistItemEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
-    private BooksEntity book;
+    private BookEntity book;
 
     @Column(name = "title")
     private String title;

@@ -5,6 +5,7 @@ import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.auth.dto.AuthenticationDTO;
 import com.yan.virtuallibrary.auth.dto.LoginResponseDTO;
 import com.yan.virtuallibrary.auth.dto.RegisterDTO;
+import com.yan.virtuallibrary.common.exception.BadRequestException;
 import com.yan.virtuallibrary.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
     private TokenService tokenService;
+
+    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO authenticationDTO) {
@@ -44,7 +46,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO registerDTO){
         if(this.userRepository.findByUsername(registerDTO.username()) != null){
-            return ResponseEntity.badRequest().body("Username already exists");
+            throw new BadRequestException("Username already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
         UserEntity user = new UserEntity(
