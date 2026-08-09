@@ -19,8 +19,29 @@ public class BookService {
         this.booksRepository = booksRepository;
     }
 
-    public BookEntity createBook(BookEntity bookEntity){
-        return booksRepository.save(bookEntity);
+    public BookResponseDTO createBook(BookRequestDTO bookRequest){
+        BookEntity bookEntity = new BookEntity();
+        bookEntity.setTitle(bookRequest.title());
+        bookEntity.setAuthor(bookRequest.author());
+        bookEntity.setCoverUrl(bookRequest.coverUrl());
+        bookEntity.setIsbn(bookRequest.isbn());
+        bookEntity.setExternalId(bookRequest.externalId());
+        bookEntity.setGenre(bookRequest.genre());
+        bookEntity.setPublisher(bookRequest.publisher());
+        bookEntity.setSynopsis(bookRequest.synopsis());
+
+        booksRepository.save(bookEntity);
+
+        return new BookResponseDTO(bookEntity.getId(),
+                bookEntity.getExternalId(),
+                bookEntity.getTitle(),
+                bookEntity.getAuthor(),
+                bookEntity.getPublisher(),
+                bookEntity.getIsbn(),
+                bookEntity.getSynopsis(),
+                bookEntity.getGenre(),
+                bookEntity.getCoverUrl(),
+                bookEntity.getSource().name());
     }
 
     public List<BookEntity> findAllBooks(){

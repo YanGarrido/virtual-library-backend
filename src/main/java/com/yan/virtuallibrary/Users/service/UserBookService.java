@@ -138,5 +138,11 @@ public class UserBookService {
         );
     }
 
+    public void deleteBook(Long userId, Long bookId){
+        UserBookEntity userBook = userBookRepository.findByUser_IdAndBook_Id(userId,bookId)
+                .orElseThrow(() -> new BookNotFoundException("You don't have this book on your library!"));
+        userBookRepository.delete(userBook);
+    }
+
 }
 

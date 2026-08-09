@@ -46,6 +46,15 @@ public class UserBookController {
 
         var result = userBookService.updateBookStatus(user.getId(), bookId, userBookUpdateDTO);
         return ResponseEntity.ok().body(result);
+
+    }
+
+    @DeleteMapping("/me/books/{bookId}")
+    public ResponseEntity<?> deleteBook(
+            @AuthenticationPrincipal UserEntity user,
+            @PathVariable Long bookId){
+        this.userBookService.deleteBook(user.getId(), bookId);
+        return ResponseEntity.ok().body("the book in your library was deleted successfully");
     }
 }
 
