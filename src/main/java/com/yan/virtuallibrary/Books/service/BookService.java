@@ -19,6 +19,20 @@ public class BookService {
         this.booksRepository = booksRepository;
     }
 
+    private BookResponseDTO convertBookEntityforBookResponseDTO(BookEntity bookEntity){
+        return new BookResponseDTO(
+                bookEntity.getId(),
+                bookEntity.getExternalId(),
+                bookEntity.getTitle(),
+                bookEntity.getAuthor(),
+                bookEntity.getPublisher(),
+                bookEntity.getIsbn(),
+                bookEntity.getSynopsis(),
+                bookEntity.getGenre(),
+                bookEntity.getCoverUrl(),
+                bookEntity.getSource().name());
+
+    }
     public BookResponseDTO createBook(BookRequestDTO bookRequest){
         BookEntity bookEntity = new BookEntity();
         bookEntity.setTitle(bookRequest.title());
@@ -32,16 +46,7 @@ public class BookService {
 
         booksRepository.save(bookEntity);
 
-        return new BookResponseDTO(bookEntity.getId(),
-                bookEntity.getExternalId(),
-                bookEntity.getTitle(),
-                bookEntity.getAuthor(),
-                bookEntity.getPublisher(),
-                bookEntity.getIsbn(),
-                bookEntity.getSynopsis(),
-                bookEntity.getGenre(),
-                bookEntity.getCoverUrl(),
-                bookEntity.getSource().name());
+        return convertBookEntityforBookResponseDTO(bookEntity);
     }
 
     public List<BookEntity> findAllBooks(){
@@ -50,18 +55,7 @@ public class BookService {
 
     public BookResponseDTO findBook(Long bookId){
         BookEntity book = booksRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book not found!"));
-        return new BookResponseDTO(
-                book.getId(),
-                book.getExternalId(),
-                book.getTitle(),
-                book.getAuthor(),
-                book.getPublisher(),
-                book.getIsbn(),
-                book.getSynopsis(),
-                book.getGenre(),
-                book.getCoverUrl(),
-                book.getSource().name()
-        );
+        return convertBookEntityforBookResponseDTO(book);
     }
 
     public BookResponseDTO updateBooks(Long id, BookRequestDTO bookRequestDTO) {
@@ -74,24 +68,9 @@ public class BookService {
             bookEntity.setSynopsis(bookRequestDTO.synopsis());
             bookEntity.setGenre(bookRequestDTO.genre());
             bookEntity.setCoverUrl(bookRequestDTO.coverUrl());
-
-            BookEntity updateBook = booksRepository.save(bookEntity);
-
-            return new BookResponseDTO(
-                    bookEntity.getId(),
-                    bookEntity.getExternalId(),
-                    bookEntity.getTitle(),
-                    bookEntity.getAuthor(),
-                    bookEntity.getPublisher(),
-                    bookEntity.getIsbn(),
-                    bookEntity.getSynopsis(),
-                    bookEntity.getGenre(),
-                    bookEntity.getCoverUrl(),
-                    bookEntity.getSource().name()
-            );
-        } else {
-            throw new RuntimeException("User not found");
         }
+        BookEntity updateBook = booksRepository.save(bookEntity);
+        return convertBookEntityforBookResponseDTO(updateBook);
 
     }
     public void deleteBook(Long id) {
