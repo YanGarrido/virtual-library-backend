@@ -16,17 +16,17 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 ## 2. HTTP e REST
 
-- [ ] Retornar `201 Created` em criacao: `POST /auth/register`, `POST /books`, `POST /users/me/books`.
-- [ ] Retornar `204 No Content` em deletes: `DELETE /users/me`, `DELETE /books/{bookId}`, `DELETE /users/me/books/{bookId}`.
-- [ ] Evitar respostas em texto puro, como `"Book updated successfully"`.
-- [ ] Padronizar responses de sucesso com DTOs.
-- [ ] Padronizar responses de erro com `RestErrorMessage`.
-- [ ] Rever `GET /users/me/books` vazio: preferir `200 []` em vez de `404`.
+- [X] Retornar `201 Created` em criacao: `POST /auth/register`, `POST /books`, `POST /users/me/books`.
+- [X] Retornar `204 No Content` em deletes: `DELETE /users/me`, `DELETE /books/{bookId}`, `DELETE /users/me/books/{bookId}`.
+- [X] Evitar respostas em texto puro, como `"Book updated successfully"`.
+- [X] Padronizar responses de sucesso com DTOs.
+- [X] Padronizar responses de erro com `RestErrorMessage`.
+- [X] Rever `GET /users/me/books` vazio: preferir `200 []` em vez de `404`.
 
 ## 3. Validacao
 
 - [ ] Adicionar validacoes completas em `RegisterDTO`.
-- [ ] Adicionar validacoes em `AuthenticationDTO`.
+- [X] Adicionar validacoes em `AuthenticationDTO`.
 - [ ] Validar `UserBookUpdateDTO`.
 - [ ] Validar datas: `finishedAt` nao pode ser antes de `startedAt`.
 - [ ] Criar regra: se status for `FINISHED`, `finishedAt` deve existir.

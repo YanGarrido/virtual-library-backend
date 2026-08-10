@@ -41,7 +41,7 @@ public class UserController {
             @AuthenticationPrincipal UserEntity user){
 
             this.userService.deleteUser(user.getId());
-            return ResponseEntity.ok().body("User deleted successfully");
+            return ResponseEntity.noContent().build();
     }
 
 }

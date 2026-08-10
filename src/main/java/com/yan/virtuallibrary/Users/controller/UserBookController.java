@@ -27,7 +27,7 @@ public class UserBookController {
             @Valid @RequestBody UserBookRequestDTO userBookRequestDTO){
 
             UserBookResponseDTO response = this.userBookService.addNewBookToUser(user.getId(),userBookRequestDTO);
-            return ResponseEntity.ok().body(response);
+            return ResponseEntity.status(201).body(response);
 
     }
     @GetMapping("/me/books")
@@ -54,7 +54,7 @@ public class UserBookController {
             @AuthenticationPrincipal UserEntity user,
             @PathVariable Long bookId){
         this.userBookService.deleteBook(user.getId(), bookId);
-        return ResponseEntity.ok().body("the book in your library was deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 }
 

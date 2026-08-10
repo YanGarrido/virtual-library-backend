@@ -19,7 +19,7 @@ public class BooksController {
     @PostMapping()
     public ResponseEntity<Object> createBook(@Valid @RequestBody BookRequestDTO bookRequestDTO){
             var result = bookService.createBook(bookRequestDTO);
-            return ResponseEntity.ok().body(result);
+            return ResponseEntity.status(201).body(result);
     }
 
     @GetMapping()
@@ -35,14 +35,14 @@ public class BooksController {
 
     @PutMapping("/{bookId}")
     public ResponseEntity<?> updateBook(@PathVariable Long bookId, @Valid @RequestBody BookRequestDTO bookRequestDTO){
-        this.bookService.updateBooks(bookId, bookRequestDTO);
-        return ResponseEntity.ok().body("Book updated successfully");
+        var response = this.bookService.updateBooks(bookId, bookRequestDTO);
+        return ResponseEntity.ok().body(response);
     }
 
     @DeleteMapping("/{bookId}")
     public ResponseEntity<?> deleteBook(@PathVariable Long bookId){
         this.bookService.deleteBook(bookId);
-        return ResponseEntity.ok().body("Book deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
