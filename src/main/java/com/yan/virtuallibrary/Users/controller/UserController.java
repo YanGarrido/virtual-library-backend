@@ -42,11 +42,11 @@ public class UserController {
         return ResponseEntity.ok().body(result);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/me")
     public ResponseEntity<?> deleteUser(
-            @PathVariable Long id){
+            @AuthenticationPrincipal UserEntity user){
 
-            this.userService.deleteUser(id);
+            this.userService.deleteUser(user.getId());
             return ResponseEntity.ok().body("User deleted successfully");
     }
 
