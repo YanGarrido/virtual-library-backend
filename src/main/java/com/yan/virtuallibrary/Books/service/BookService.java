@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 public class BookService {
 
-    private BooksRepository booksRepository;
+    private final BooksRepository booksRepository;
 
     public BookService(BooksRepository booksRepository){
         this.booksRepository = booksRepository;
@@ -62,7 +62,6 @@ public class BookService {
 
     public BookResponseDTO updateBooks(Long id, BookRequestDTO bookRequestDTO) {
         BookEntity bookEntity = booksRepository.findById(id).orElseThrow(() -> new BookNotFoundException("Book not found"));
-        if(bookEntity != null){
             bookEntity.setAuthor(bookRequestDTO.author());
             bookEntity.setTitle(bookRequestDTO.title());
             bookEntity.setPublisher(bookRequestDTO.publisher());
@@ -70,7 +69,7 @@ public class BookService {
             bookEntity.setSynopsis(bookRequestDTO.synopsis());
             bookEntity.setGenre(bookRequestDTO.genre());
             bookEntity.setCoverUrl(bookRequestDTO.coverUrl());
-        }
+
         BookEntity updateBook = booksRepository.save(bookEntity);
         return convertBookEntityforBookResponseDTO(updateBook);
 

@@ -1,13 +1,9 @@
 package com.yan.virtuallibrary.Users.controller;
 
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
-import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
-import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserUpdateDTO;
-import com.yan.virtuallibrary.Users.service.UserBookService;
+
 import com.yan.virtuallibrary.Users.service.UserService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +13,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
 
-    private UserService userService;
-    private UserBookService userBookService;
+    private final UserService userService;
 
-    public UserController(UserService userService, UserBookService userBookService){
+    public UserController(UserService userService){
         this.userService = userService;
-        this.userBookService = userBookService;
     }
 
     @GetMapping("/me")

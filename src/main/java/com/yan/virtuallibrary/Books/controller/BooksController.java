@@ -2,7 +2,6 @@ package com.yan.virtuallibrary.Books.controller;
 
 import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.service.BookService;
-import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/books")
 public class BooksController {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     public BooksController(BookService bookService){
         this.bookService = bookService;

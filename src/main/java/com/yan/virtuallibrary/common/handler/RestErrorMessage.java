@@ -1,4 +1,4 @@
-package com.yan.virtuallibrary.common.exception;
+package com.yan.virtuallibrary.common.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
