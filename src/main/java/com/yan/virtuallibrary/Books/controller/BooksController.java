@@ -2,7 +2,7 @@ package com.yan.virtuallibrary.Books.controller;
 
 import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.service.BookService;
-import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/books")
 public class BooksController {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     public BooksController(BookService bookService){
         this.bookService = bookService;
     }
 
     @PostMapping()
-    public ResponseEntity<Object> createBook(@RequestBody BookRequestDTO bookRequestDTO){
+    public ResponseEntity<Object> createBook(@Valid @RequestBody BookRequestDTO bookRequestDTO){
             var result = bookService.createBook(bookRequestDTO);
             return ResponseEntity.ok().body(result);
     }
@@ -34,7 +34,7 @@ public class BooksController {
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity<?> updateBook(@PathVariable Long bookId, @RequestBody BookRequestDTO bookRequestDTO){
+    public ResponseEntity<?> updateBook(@PathVariable Long bookId, @Valid @RequestBody BookRequestDTO bookRequestDTO){
         this.bookService.updateBooks(bookId, bookRequestDTO);
         return ResponseEntity.ok().body("Book updated successfully");
     }

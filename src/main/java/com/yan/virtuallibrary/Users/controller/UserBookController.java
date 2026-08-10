@@ -5,7 +5,7 @@ import com.yan.virtuallibrary.Users.dto.UserBookRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookUpdateDTO;
 import com.yan.virtuallibrary.Users.service.UserBookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class UserBookController {
     @PostMapping("/me/books")
     public ResponseEntity<?> addNewBookToUser(
             @AuthenticationPrincipal UserEntity user,
-            @RequestBody UserBookRequestDTO userBookRequestDTO){
+            @Valid @RequestBody UserBookRequestDTO userBookRequestDTO){
 
             UserBookResponseDTO response = this.userBookService.addNewBookToUser(user.getId(),userBookRequestDTO);
             return ResponseEntity.ok().body(response);
@@ -41,7 +41,7 @@ public class UserBookController {
     @PatchMapping("/me/books/{bookId}")
     public ResponseEntity<?> updateBookStatus(
             @AuthenticationPrincipal UserEntity user,
-            @PathVariable Long bookId,
+            @Valid @PathVariable Long bookId,
             @RequestBody UserBookUpdateDTO userBookUpdateDTO){
 
         var result = userBookService.updateBookStatus(user.getId(), bookId, userBookUpdateDTO);

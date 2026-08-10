@@ -1,5 +1,6 @@
-package com.yan.virtuallibrary.common.exception;
+package com.yan.virtuallibrary.common.handler;
 
+import com.yan.virtuallibrary.common.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

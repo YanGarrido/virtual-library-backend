@@ -5,9 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 public record BookRequestDTO(
         String externalId,
         @NotBlank String title,
-        String author,
+        @NotBlank String author,
         String publisher,
-        String isbn,
+        @NotBlank String isbn,
         String synopsis,
         String genre,
         String coverUrl

@@ -1,22 +1,23 @@
 package com.yan.virtuallibrary.Users.service;
 
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
-import com.yan.virtuallibrary.Users.dto.UserRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserUpdateDTO;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.UserNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
 
     }
     private UserResponseDTO convertUserEntityforUserResponse(UserEntity user){
@@ -35,7 +36,7 @@ public class UserService {
     }
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        UserEntity user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         if(userUpdateDTO.name() != null) {
             user.setName(userUpdateDTO.name());
         }
@@ -46,7 +47,7 @@ public class UserService {
             user.setEmail(userUpdateDTO.email());
         }
         if(userUpdateDTO.password() != null) {
-            String encryptedPassword = new BCryptPasswordEncoder().encode(userUpdateDTO.password());
+            String encryptedPassword = this.passwordEncoder.encode(userUpdateDTO.password());
             user.setPassword(encryptedPassword);
         }
         UserEntity updatedUser = userRepository.save(user);
@@ -54,7 +55,7 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        UserEntity user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
     }
 

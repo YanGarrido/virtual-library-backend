@@ -8,11 +8,10 @@ import com.yan.virtuallibrary.auth.dto.RegisterDTO;
 import com.yan.virtuallibrary.common.exception.BadRequestException;
 import com.yan.virtuallibrary.security.TokenService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    private AuthenticationManager authenticationManager;
-    private UserRepository userRepository;
-    private TokenService tokenService;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -48,7 +49,7 @@ public class AuthenticationController {
         if(this.userRepository.findByUsername(registerDTO.username()) != null){
             throw new BadRequestException("Username already exists");
         }
-        String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
+        String encryptedPassword = this.passwordEncoder.encode(registerDTO.password());
         UserEntity user = new UserEntity(
                 registerDTO.name(),
                 registerDTO.username(),
