@@ -49,8 +49,10 @@ public class BookService {
         return convertBookEntityforBookResponseDTO(bookEntity);
     }
 
-    public List<BookEntity> findAllBooks(){
-        return booksRepository.findAll();
+    public List<BookResponseDTO> findAllBooks(){
+        return booksRepository.findAll().stream()
+                .map(this::convertBookEntityforBookResponseDTO)
+                .toList();
     }
 
     public BookResponseDTO findBook(Long bookId){
