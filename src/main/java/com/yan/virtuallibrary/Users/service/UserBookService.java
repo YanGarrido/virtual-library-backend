@@ -12,6 +12,7 @@ import com.yan.virtuallibrary.Users.repository.UserBookRepository;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.BookAlreadyInLibraryException;
 import com.yan.virtuallibrary.common.exception.BookNotFoundException;
+import com.yan.virtuallibrary.common.exception.UnauthorizedException;
 import com.yan.virtuallibrary.common.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -81,11 +82,15 @@ public class UserBookService {
     
     public List<UserBookResponseDTO> findMyBooks(Long id){
         if(id == null){
-            throw new BookNotFoundException("Book not found!");
+            throw new UnauthorizedException("User not recognized; please log in.");
         }
-        return userBookRepository.findAllByUser_Id(id).stream()
+         var result = userBookRepository.findAllByUser_Id(id).stream()
                 .map(this::convertUserBookEntityforUserBookResponse)
                 .toList();
+        if(result.isEmpty()){
+            throw new BookNotFoundException("You don't have any book on your library!");
+        }
+        return result;
     }
 
     public UserBookResponseDTO updateBookStatus(Long userId, Long bookId, UserBookUpdateDTO userBookUpdateDTO){
