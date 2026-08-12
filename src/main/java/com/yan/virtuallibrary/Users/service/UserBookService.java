@@ -87,9 +87,7 @@ public class UserBookService {
          var result = userBookRepository.findAllByUser_Id(id).stream()
                 .map(this::convertUserBookEntityforUserBookResponse)
                 .toList();
-        if(result.isEmpty()){
-            throw new BookNotFoundException("You don't have any book on your library!");
-        }
+
         return result;
     }
 

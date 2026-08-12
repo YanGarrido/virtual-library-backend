@@ -46,8 +46,9 @@ class UserServiceTest {
         assertEquals("johndoe@example.com", reponse.email());
         assertEquals("USER", reponse.role());
     }
+
     @Test
-    void getMe_shouldThrowNewUserNotFoundException_whenUserIsNull(){
+    void getMe_shouldThrowNewUserNotFoundException_whenUserIsNull() {
         assertThrows(UserNotFoundException.class, () -> userService.getMe(null));
     }
 
@@ -81,10 +82,24 @@ class UserServiceTest {
         verify(userRepository).save(user);
 
 
-
-
-
     }
+
+    @Test
+    void updateUser_shouldReturnUserNotFoundException_whenUserIsNotFound() {
+        Long id = 1L;
+
+        UserUpdateDTO dto = new UserUpdateDTO(
+                "Jane Smith",
+                null,
+                null,
+                null);
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(id, dto));
+    }
+
     @Test
     void updateUser_shouldEncodePassword_whenPasswordIsProvided() {
         Long id = 1L;
@@ -122,6 +137,69 @@ class UserServiceTest {
         verify(userRepository).save(user);
 
     }
+
+    @Test
+    void updateUser_shouldNotUpdatePassword_whenPasswordIsNotProvided() {
+        Long id = 1L;
+
+        UserEntity user = new UserEntity();
+        user.setName("Jane Doe");
+        user.setUsername("janedoe");
+        user.setEmail("janedoe@example.com");
+        user.setRole(Role.USER);
+        user.setPassword("oldPassword");
+
+        UserUpdateDTO dto = new UserUpdateDTO(
+                null,
+                null,
+                null,
+                null);
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(user));
+
+        when(userRepository.save(user)).thenReturn(user);
+
+        UserResponseDTO response = userService.updateUser(id, dto);
+
+        assertEquals("Jane Doe", response.name());
+        assertEquals("janedoe", response.username());
+        assertEquals("janedoe@example.com", response.email());
+        assertEquals("USER", response.role());
+        assertEquals("oldPassword", user.getPassword());
+
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void deleteUser_shouldDeleteUser_whenUserExists() {
+        Long id = 1L;
+
+        UserEntity user = new UserEntity();
+        user.setName("Jane Doe");
+        user.setUsername("janedoe");
+        user.setEmail("janedoe@example.com");
+        user.setRole(Role.USER);
+        user.setPassword("oldPassword");
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.of(user));
+
+        userService.deleteUser(id);
+
+        verify(userRepository).findById(id);
+        verify(userRepository).delete(user);
+    }
+
+    @Test
+    void deleteUser_shouldNotDeleteUser_whenUserIsNotProvided(){
+
+        Long id = 1L;
+
+        when(userRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
+
+    }
 }
-
-

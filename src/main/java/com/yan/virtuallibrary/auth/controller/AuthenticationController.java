@@ -58,6 +58,6 @@ public class AuthenticationController {
                 registerDTO.role()
         );
         this.userRepository.save(user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(201).build();
     }
 }

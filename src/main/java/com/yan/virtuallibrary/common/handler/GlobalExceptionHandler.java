@@ -37,4 +37,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.UNAUTHORIZED, exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMessage);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<RestErrorMessage> runtimeException(RuntimeException exception){
+        RestErrorMessage errorMessage = new RestErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+    }
 }
