@@ -6,9 +6,9 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 - [X] Ativar o profile `test` no `VirtualLibraryApplicationTests`.
 - [X] Garantir que os testes usem H2, nao PostgreSQL local.
-- [ ] Criar testes unitarios para `BookService`.
+- [X] Criar testes unitarios para `BookService`.
 - [ ] Criar testes unitarios para `UserBookService`.
-- [ ] Completar testes do `UserService`.
+- [X] Completar testes do `UserService`.
 - [ ] Criar testes de controller para `/auth`.
 - [ ] Criar testes de controller para `/books`.
 - [ ] Criar testes de controller para `/users/me`.
