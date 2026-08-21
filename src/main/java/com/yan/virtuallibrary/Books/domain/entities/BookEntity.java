@@ -30,7 +30,7 @@ public class BookEntity {
     private String synopsis;
     @Column (name = "genre")
     private String genre;
-    @Column(name = "cover_url")
+    @Column(name = "cover_url", columnDefinition = "TEXT")
     private String coverUrl;
 
     @Enumerated(EnumType.STRING)
