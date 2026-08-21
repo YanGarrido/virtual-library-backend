@@ -1,6 +1,7 @@
 package com.yan.virtuallibrary.Books.controller;
 
 import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
+import com.yan.virtuallibrary.Books.dto.ImportBookDTO;
 import com.yan.virtuallibrary.Books.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +53,18 @@ public class BooksController {
                                        @RequestParam(required = false) String isbn){
     var result = this.bookService.findBooks(title, author, genre, isbn);
     return ResponseEntity.ok().body(result);
+    }
+
+    @GetMapping("/external/search")
+    public ResponseEntity<?> searchExternalBooks(@RequestParam String query,
+                                                 @RequestParam(required = false) Integer maxResults) {
+        var result = this.bookService.searchExternalBooks(query, maxResults);
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<?> importExternalBook(@Valid @RequestBody ImportBookDTO importBookDTO) {
+        var result = this.bookService.importExternalBook(importBookDTO);
+        return ResponseEntity.status(201).body(result);
     }
 }
