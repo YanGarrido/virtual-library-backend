@@ -8,51 +8,25 @@ import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.dto.UserBookRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookUpdateDTO;
+import com.yan.virtuallibrary.Users.mapper.UserBookMapper;
 import com.yan.virtuallibrary.Users.repository.UserBookRepository;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.BookAlreadyInLibraryException;
 import com.yan.virtuallibrary.common.exception.BookNotFoundException;
 import com.yan.virtuallibrary.common.exception.UnauthorizedException;
 import com.yan.virtuallibrary.common.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserBookService {
     private final UserRepository userRepository;
     private final BooksRepository booksRepository;
     private final UserBookRepository userBookRepository;
-
-    public UserBookService(UserRepository userRepository, BooksRepository booksRepository, UserBookRepository userBookRepository) {
-        this.userRepository = userRepository;
-        this.booksRepository = booksRepository;
-        this.userBookRepository = userBookRepository;
-    }
-
-    private UserBookResponseDTO convertUserBookEntityforUserBookResponse(UserBookEntity userBookEntity){
-        return new UserBookResponseDTO(
-                userBookEntity.getId(),
-                new BookResponseDTO(
-                        userBookEntity.getBook().getId(),
-                        userBookEntity.getBook().getExternalId(),
-                        userBookEntity.getBook().getTitle(),
-                        userBookEntity.getBook().getAuthor(),
-                        userBookEntity.getBook().getPublisher(),
-                        userBookEntity.getBook().getIsbn(),
-                        userBookEntity.getBook().getSynopsis(),
-                        userBookEntity.getBook().getGenre(),
-                        userBookEntity.getBook().getCoverUrl(),
-                        userBookEntity.getBook().getSource().name()
-                ),
-                userBookEntity.getReadStatus(),
-                userBookEntity.getReadFormat(),
-                userBookEntity.getStartedAt(),
-                userBookEntity.getFinishedAt(),
-                userBookEntity.getCreated_at(),
-                userBookEntity.getUpdated_at()
-        );
-    }
+    private final UserBookMapper userBookMapper;
 
     public UserBookResponseDTO addNewBookToUser(Long id, UserBookRequestDTO userBookRequestDTO){
 
@@ -76,16 +50,15 @@ public class UserBookService {
 
         UserBookEntity savedUserBook = userBookRepository.save(userBookEntity);
 
-        return convertUserBookEntityforUserBookResponse(savedUserBook);
-
+        return userBookMapper.userBookEntityToUserBookResponseDTO(savedUserBook);
     }
-    
+
     public List<UserBookResponseDTO> findMyBooks(Long id){
         if(id == null){
             throw new UnauthorizedException("User not recognized; please log in.");
         }
          var result = userBookRepository.findAllByUser_Id(id).stream()
-                .map(this::convertUserBookEntityforUserBookResponse)
+                .map(userBookMapper::userBookEntityToUserBookResponseDTO)
                 .toList();
 
         return result;
@@ -102,7 +75,7 @@ public class UserBookService {
 
         UserBookEntity updatedUserBook = userBookRepository.save(userBook);
 
-        return convertUserBookEntityforUserBookResponse(updatedUserBook);
+        return userBookMapper.userBookEntityToUserBookResponseDTO(updatedUserBook);
     }
 
     public void deleteBook(Long userId, Long bookId){
