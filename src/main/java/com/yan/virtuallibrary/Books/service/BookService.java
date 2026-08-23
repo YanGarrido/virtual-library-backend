@@ -10,39 +10,24 @@ import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.dto.BookResponseDTO;
 import com.yan.virtuallibrary.Books.dto.BookSearchResponseDTO;
 import com.yan.virtuallibrary.Books.dto.ImportBookDTO;
+import com.yan.virtuallibrary.Books.mapper.BookMapper;
 import com.yan.virtuallibrary.Books.repository.BooksRepository;
 import com.yan.virtuallibrary.common.exception.BookNotFoundException;
 import com.yan.virtuallibrary.common.exception.BadRequestException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
+    private final BookMapper bookMapper;
     private final BooksRepository booksRepository;
     private final GoogleBooksClient googleBooksClient;
 
-    public BookService(BooksRepository booksRepository, GoogleBooksClient googleBooksClient){
-        this.booksRepository = booksRepository;
-        this.googleBooksClient = googleBooksClient;
-    }
-
-    private BookResponseDTO convertBookEntityforBookResponseDTO(BookEntity bookEntity){
-        return new BookResponseDTO(
-                bookEntity.getId(),
-                bookEntity.getExternalId(),
-                bookEntity.getTitle(),
-                bookEntity.getAuthor(),
-                bookEntity.getPublisher(),
-                bookEntity.getIsbn(),
-                bookEntity.getSynopsis(),
-                bookEntity.getGenre(),
-                bookEntity.getCoverUrl(),
-                bookEntity.getSource().name());
-
-    }
     public BookResponseDTO createBook(BookRequestDTO bookRequest){
         BookEntity bookEntity = new BookEntity();
         bookEntity.setTitle(bookRequest.title());
@@ -56,18 +41,18 @@ public class BookService {
 
         booksRepository.save(bookEntity);
 
-        return convertBookEntityforBookResponseDTO(bookEntity);
+        return bookMapper.bookEntityToBookResponseDTO(bookEntity);
     }
 
     public List<BookResponseDTO> findAllBooks(){
         return booksRepository.findAll().stream()
-                .map(this::convertBookEntityforBookResponseDTO)
+                .map(bookMapper::bookEntityToBookResponseDTO)
                 .toList();
     }
 
     public BookResponseDTO findBook(Long bookId){
         BookEntity book = booksRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException("Book not found!"));
-        return convertBookEntityforBookResponseDTO(book);
+        return bookMapper.bookEntityToBookResponseDTO(book);
     }
 
     public BookResponseDTO updateBooks(Long id, BookRequestDTO bookRequestDTO) {
@@ -81,7 +66,7 @@ public class BookService {
             bookEntity.setCoverUrl(bookRequestDTO.coverUrl());
 
         BookEntity updateBook = booksRepository.save(bookEntity);
-        return convertBookEntityforBookResponseDTO(updateBook);
+        return bookMapper.bookEntityToBookResponseDTO(updateBook);
 
     }
     public void deleteBook(Long id) {
@@ -130,7 +115,7 @@ public class BookService {
 
     public BookResponseDTO importExternalBook(ImportBookDTO importBookDTO) {
         return booksRepository.findByExternalIdAndSource(importBookDTO.externalId(), BookSource.GOOGLE_BOOKS)
-                .map(this::convertBookEntityforBookResponseDTO)
+                .map(bookMapper::bookEntityToBookResponseDTO)
                 .orElseGet(() -> createBookFromGoogleBooks(importBookDTO.externalId()));
     }
 
@@ -144,7 +129,7 @@ public class BookService {
         BookEntity bookEntity = convertGoogleVolumeToBookEntity(volume);
         BookEntity savedBook = booksRepository.save(bookEntity);
 
-        return convertBookEntityforBookResponseDTO(savedBook);
+        return bookMapper.bookEntityToBookResponseDTO(savedBook);
     }
 
     private BookSearchResponseDTO convertGoogleVolumeToBookSearchResponse(GoogleBooksVolumeDTO volume) {
