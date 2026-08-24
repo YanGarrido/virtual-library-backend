@@ -2,6 +2,7 @@ package com.yan.virtuallibrary.Users.service;
 
 import com.yan.virtuallibrary.Books.domain.entities.BookEntity;
 import com.yan.virtuallibrary.Books.domain.enums.BookSource;
+import com.yan.virtuallibrary.Books.dto.BookResponseDTO;
 import com.yan.virtuallibrary.Books.repository.BooksRepository;
 import com.yan.virtuallibrary.Users.domain.entities.UserBookEntity;
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
@@ -10,6 +11,7 @@ import com.yan.virtuallibrary.Users.domain.enums.ReadStatus;
 import com.yan.virtuallibrary.Users.dto.UserBookRequestDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserBookUpdateDTO;
+import com.yan.virtuallibrary.Users.mapper.UserBookMapper;
 import com.yan.virtuallibrary.Users.repository.UserBookRepository;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.BookAlreadyInLibraryException;
@@ -42,6 +44,9 @@ class UserBookServiceTest {
 
     @Mock
     private UserBookRepository userBookRepository;
+
+    @Mock
+    private UserBookMapper userBookMapper;
 
     @InjectMocks
     private UserBookService userBookService;
@@ -80,6 +85,37 @@ class UserBookServiceTest {
         userBook.setReadStatus(ReadStatus.READING);
         userBook.setStartedAt(LocalDate.of(2026, 7, 1));
         userBook.setFinishedAt(LocalDate.of(2026, 7, 20));
+
+        lenient()
+                .when(userBookMapper.userBookEntityToUserBookResponseDTO(any(UserBookEntity.class)))
+                .thenAnswer(invocation -> toUserBookResponseDTO(invocation.getArgument(0)));
+    }
+
+    private UserBookResponseDTO toUserBookResponseDTO(UserBookEntity userBookEntity) {
+        BookEntity bookEntity = userBookEntity.getBook();
+        BookResponseDTO bookResponseDTO = new BookResponseDTO(
+                bookEntity.getId(),
+                bookEntity.getExternalId(),
+                bookEntity.getTitle(),
+                bookEntity.getAuthor(),
+                bookEntity.getPublisher(),
+                bookEntity.getIsbn(),
+                bookEntity.getSynopsis(),
+                bookEntity.getGenre(),
+                bookEntity.getCoverUrl(),
+                bookEntity.getSource().name()
+        );
+
+        return new UserBookResponseDTO(
+                userBookEntity.getId(),
+                bookResponseDTO,
+                userBookEntity.getReadStatus(),
+                userBookEntity.getReadFormat(),
+                userBookEntity.getStartedAt(),
+                userBookEntity.getFinishedAt(),
+                null,
+                null
+        );
     }
 
     @Test

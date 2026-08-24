@@ -3,36 +3,26 @@ package com.yan.virtuallibrary.Users.service;
 import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserUpdateDTO;
+import com.yan.virtuallibrary.Users.mapper.UserMapper;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.UserNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-
-    }
-    private UserResponseDTO convertUserEntityforUserResponse(UserEntity user){
-        return new UserResponseDTO(
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().name());
-    }
+    private final UserMapper userMapper;
 
     public UserResponseDTO getMe(UserEntity user) {
         if(user == null){
             throw new UserNotFoundException();
         }
-      return convertUserEntityforUserResponse(user);
+      return userMapper.userEntityToUserResponseDTO(user);
     }
 
     public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO) {
@@ -51,7 +41,7 @@ public class UserService {
             user.setPassword(encryptedPassword);
         }
         UserEntity updatedUser = userRepository.save(user);
-        return convertUserEntityforUserResponse(updatedUser);
+        return userMapper.userEntityToUserResponseDTO(updatedUser);
     }
 
     public void deleteUser(Long id) {

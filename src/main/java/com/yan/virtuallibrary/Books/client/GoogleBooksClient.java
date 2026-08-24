@@ -9,7 +9,8 @@ import org.springframework.web.client.RestClient;
 @Component
 public class GoogleBooksClient {
 
-    private final RestClient restClient;
+    private final RestClient.Builder restClientBuilder;
+    private final String baseUrl;
     private final String apiKey;
 
     public GoogleBooksClient(
@@ -17,14 +18,13 @@ public class GoogleBooksClient {
             @Value("${external.google-books.base-url:https://www.googleapis.com/books/v1}") String baseUrl,
             @Value("${external.google-books.api-key:}") String apiKey
     ) {
+        this.restClientBuilder = restClientBuilder;
+        this.baseUrl = baseUrl;
         this.apiKey = apiKey;
-        this.restClient = restClientBuilder
-                .baseUrl(baseUrl)
-                .build();
     }
 
     public GoogleBooksVolumeListDTO searchBooks(String query, Integer maxResults) {
-        return restClient.get()
+        return restClient().get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/volumes")
                         .queryParam("q", query)
@@ -38,11 +38,17 @@ public class GoogleBooksClient {
     }
 
     public GoogleBooksVolumeDTO findBookById(String externalId) {
-        return restClient.get().uri(uriBuilder -> uriBuilder
+        return restClient().get().uri(uriBuilder -> uriBuilder
                 .path("/volumes/{externalId}")
                 .queryParam("key", apiKey)
                 .build(externalId))
                 .retrieve()
                 .body(GoogleBooksVolumeDTO.class);
+    }
+
+    private RestClient restClient() {
+        return restClientBuilder
+                .baseUrl(baseUrl)
+                .build();
     }
 }

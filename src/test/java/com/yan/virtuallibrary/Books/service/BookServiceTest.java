@@ -5,6 +5,7 @@ import com.yan.virtuallibrary.Books.domain.enums.BookSource;
 import com.yan.virtuallibrary.Books.dto.BookRequestDTO;
 import com.yan.virtuallibrary.Books.dto.BookResponseDTO;
 import com.yan.virtuallibrary.Books.dto.BookSearchResponseDTO;
+import com.yan.virtuallibrary.Books.mapper.BookMapper;
 import com.yan.virtuallibrary.Books.repository.BooksRepository;
 import com.yan.virtuallibrary.common.exception.BookNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,9 @@ class BookServiceTest {
 
     @Mock
     private BooksRepository booksRepository;
+
+    @Mock
+    private BookMapper bookMapper;
 
     @InjectMocks
     private BookService bookService;
@@ -47,6 +51,25 @@ class BookServiceTest {
 
         // Troque pelo enum correto do seu projeto
         book.setSource(BookSource.MANUAL);
+
+        lenient()
+                .when(bookMapper.bookEntityToBookResponseDTO(any(BookEntity.class)))
+                .thenAnswer(invocation -> toBookResponseDTO(invocation.getArgument(0)));
+    }
+
+    private BookResponseDTO toBookResponseDTO(BookEntity bookEntity) {
+        return new BookResponseDTO(
+                bookEntity.getId(),
+                bookEntity.getExternalId(),
+                bookEntity.getTitle(),
+                bookEntity.getAuthor(),
+                bookEntity.getPublisher(),
+                bookEntity.getIsbn(),
+                bookEntity.getSynopsis(),
+                bookEntity.getGenre(),
+                bookEntity.getCoverUrl(),
+                bookEntity.getSource().name()
+        );
     }
 
     @Test

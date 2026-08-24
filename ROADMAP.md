@@ -6,6 +6,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 - [X] Ativar o profile `test` no `VirtualLibraryApplicationTests`.
 - [X] Garantir que os testes usem H2, nao PostgreSQL local.
+- [X] Desabilitar Flyway no profile `test` para evitar conflito entre migrations PostgreSQL e H2.
 - [X] Criar testes unitarios para `BookService`.
 - [X] Criar testes unitarios para `UserBookService`.
 - [X] Completar testes do `UserService`.
@@ -35,7 +36,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 ## 4. Seguranca
 
-- [ ] Garantir que usuario comum nao consiga criar `ADMIN` no `/auth/register`.
+- [X] Garantir que usuario comum nao consiga criar `ADMIN` no `/auth/register`.
 - [ ] Criar uma regra para primeiro admin ou seed manual.
 - [ ] Revisar permissoes de `/books`.
 - [ ] Validar token expirado com resposta clara.
@@ -47,7 +48,9 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 - [ ] Adicionar indices em campos buscados: `title`, `author`, `genre`, `isbn`, `username`, `email`.
 - [ ] Avaliar `UNIQUE` para `isbn`.
-- [ ] Melhorar migration da tabela de livros.
+- [X] Melhorar migration da tabela de livros para campos longos vindos de API externa.
+- [X] Alterar `cover_url` para `TEXT`.
+- [X] Alterar `synopsis` para `TEXT`.
 - [ ] Criar migration para indices.
 - [ ] Revisar `ddl-auto=validate`.
 - [ ] Estudar transacoes com `@Transactional`.
@@ -63,7 +66,24 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 - [ ] Adicionar validacao contra ISBN duplicado.
 - [ ] Criar testes para create, update, delete e search.
 
-## 7. User Books
+## 7. API Externa de Livros
+
+- [X] Criar client para consumir Google Books API.
+- [X] Criar DTOs para mapear resposta da API externa.
+- [X] Criar endpoint para buscar livros externos: `GET /books/external/search`.
+- [X] Criar endpoint para importar livro externo: `POST /books/import`.
+- [X] Salvar origem do livro como `GOOGLE_BOOKS`.
+- [X] Evitar duplicidade por `externalId` e `source`.
+- [X] Configurar API key por variavel de ambiente `GOOGLE_BOOKS_API_KEY`.
+- [X] Criar bean de `RestClient.Builder`.
+- [X] Proteger importacao de livros para apenas `ADMIN`.
+- [ ] Tratar erro `429 Too Many Requests` da API externa com resposta amigavel.
+- [ ] Tratar indisponibilidade da API externa com resposta amigavel.
+- [ ] Criar testes unitarios para busca externa e importacao.
+- [ ] Criar cache local para reduzir chamadas repetidas ao Google Books.
+- [ ] Avaliar fallback com Open Library.
+
+## 8. User Books
 
 - [ ] Manter `GET /users/me/books` retornando lista vazia se nao houver livros.
 - [ ] Criar filtro por status: `GET /users/me/books?status=READING`.
@@ -72,7 +92,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 - [ ] Validar duplicidade com `BookAlreadyInLibraryException`.
 - [ ] Criar testes para adicionar, listar, atualizar e remover livro.
 
-## 8. Reviews
+## 9. Reviews
 
 - [ ] Criar `ReviewRepository`.
 - [ ] Criar `ReviewService`.
@@ -84,7 +104,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 - [ ] Validar nota entre 1 e 5.
 - [ ] Permitir apenas uma review por livro do usuario.
 
-## 9. Wishlist
+## 10. Wishlist
 
 - [ ] Criar `WishlistRepository`.
 - [ ] Criar `WishlistService`.
@@ -95,7 +115,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 - [ ] Criar endpoint para converter wishlist em livro da biblioteca.
 - [ ] Criar testes.
 
-## 10. Documentacao
+## 11. Documentacao
 
 - [ ] Adicionar Swagger/OpenAPI.
 - [ ] Documentar endpoints de auth.
@@ -108,13 +128,14 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
   - como autenticar
   - exemplos de chamadas
 
-## 11. DevOps
+## 12. DevOps
 
 - [ ] Criar `docker-compose.yml` com PostgreSQL.
 - [ ] Criar profile `dev`.
 - [ ] Criar profile `test`.
 - [ ] Criar profile `prod`.
 - [ ] Criar `.env.example`.
+- [ ] Documentar `GOOGLE_BOOKS_API_KEY` no `.env.example`.
 - [ ] Criar pipeline GitHub Actions para rodar testes.
 - [ ] Garantir que a API sobe do zero com README.
 
@@ -124,10 +145,11 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 2. HTTP e status code.
 3. Validacoes.
 4. Seguranca do registro/admin.
-5. Paginacao em livros.
-6. Filtros e stats da biblioteca do usuario.
-7. Reviews.
-8. Wishlist.
-9. Swagger.
-10. Docker.
-
+5. Melhorar tratamento de erros da API externa.
+6. Criar testes da integracao externa.
+7. Paginacao em livros.
+8. Filtros e stats da biblioteca do usuario.
+9. Reviews.
+10. Wishlist.
+11. Swagger.
+12. Docker.

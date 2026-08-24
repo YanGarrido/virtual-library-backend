@@ -4,8 +4,10 @@ import com.yan.virtuallibrary.Users.domain.entities.UserEntity;
 import com.yan.virtuallibrary.Users.domain.enums.Role;
 import com.yan.virtuallibrary.Users.dto.UserResponseDTO;
 import com.yan.virtuallibrary.Users.dto.UserUpdateDTO;
+import com.yan.virtuallibrary.Users.mapper.UserMapper;
 import com.yan.virtuallibrary.Users.repository.UserRepository;
 import com.yan.virtuallibrary.common.exception.UserNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,8 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -28,9 +29,27 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private UserMapper userMapper;
+
     @InjectMocks
     public UserService userService;
 
+    @BeforeEach
+    void setUp() {
+        lenient()
+                .when(userMapper.userEntityToUserResponseDTO(any(UserEntity.class)))
+                .thenAnswer(invocation -> toUserResponseDTO(invocation.getArgument(0)));
+    }
+
+    private UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
+        return new UserResponseDTO(
+                userEntity.getName(),
+                userEntity.getUsername(),
+                userEntity.getEmail(),
+                userEntity.getRole().name()
+        );
+    }
 
     @Test
     void getMe_shouldReturnUserResponse_whenUserExists() {
