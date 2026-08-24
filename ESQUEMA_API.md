@@ -118,10 +118,11 @@ Parametros aceitos em `/books/search`:
   "name": "Jane Doe",
   "username": "janedoe",
   "email": "jane@example.com",
-  "password": "123456",
-  "role": "USER"
+  "password": "123456"
 }
 ```
+
+Observacao: o cadastro publico sempre cria usuarios com role `USER`. A role `ADMIN` nao deve ser enviada pelo cliente nesse fluxo.
 
 ### AuthenticationDTO
 

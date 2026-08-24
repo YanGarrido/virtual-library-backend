@@ -36,7 +36,7 @@ Este arquivo organiza os principais conceitos, melhorias e implementacoes que po
 
 ## 4. Seguranca
 
-- [ ] Garantir que usuario comum nao consiga criar `ADMIN` no `/auth/register`.
+- [X] Garantir que usuario comum nao consiga criar `ADMIN` no `/auth/register`.
 - [ ] Criar uma regra para primeiro admin ou seed manual.
 - [ ] Revisar permissoes de `/books`.
 - [ ] Validar token expirado com resposta clara.
